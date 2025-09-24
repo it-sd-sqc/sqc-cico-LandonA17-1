@@ -68,7 +68,11 @@ Use `./build.sh` to build CiCo and `./run.sh` to run it if using the command lin
 2. Enter asdasd into the field and click Update.
 
 ## Expected results
+<<<<<<< HEAD
 * The text box should not allow any non-numeric values.
+=======
+* The panel should display "Enter in a valid card identification" after step 2.
+>>>>>>> module4
 
 
 
