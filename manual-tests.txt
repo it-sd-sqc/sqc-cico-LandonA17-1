@@ -74,5 +74,17 @@ Use `./build.sh` to build CiCo and `./run.sh` to run it if using the command lin
 * The panel should display "Enter in a valid card identification" after step 2.
 >>>>>>> module4
 
+Module 5: Adding a Skip Button
+
+Test Steps:
+1. Build and run CiCo.
+2. Enter 00000000 into the input field and click Update.
+3. Confirm that the status panel pops up.
+4. Verify that a button labeled OK (Skip) is displayed to allow skipping processing.
+
+Expected Results:
+* The Skip button should appear in the status panel.
+* When clicked, it should bypass the timeout for processing and immediately continue to the next step/state.
+
 
 
