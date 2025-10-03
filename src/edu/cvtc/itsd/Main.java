@@ -45,20 +45,22 @@ public class Main {
         if (stringToAdd != null && stringToAdd.matches("\\d+") && stringToAdd.length() + fb.getDocument().getLength() <= MAX_LENGTH) {
             super.insertString(fb, offset, stringToAdd, attr);
         }
-      else {
-        Toolkit.getDefaultToolkit().beep();
-      }
-    }
-
-    @Override
-    public void replace(FilterBypass fb, int offset, int lengthToDelete, String stringToAdd, AttributeSet attr)
-        throws BadLocationException
-    {
-        // Checking for null, digits only, and max length.
-        if (stringToAdd != null && stringToAdd.matches("\\d+") && stringToAdd.length() + fb.getDocument().getLength() - lengthToDelete <= MAX_LENGTH) {
-            super.replace(fb, offset, lengthToDelete, stringToAdd, attr);
+        else {
+          Toolkit.getDefaultToolkit().beep();
         }
-      else {
+    }
+    @Override
+    public void replace(FilterBypass fb, int offset, int lengthToDelete,
+                        String stringToAdd, AttributeSet attr)
+      throws BadLocationException
+    {
+      if (stringToAdd == null || stringToAdd.isEmpty()) {
+        super.replace(fb, offset, lengthToDelete, stringToAdd, attr);
+      } else if (stringToAdd.matches("\\d+") &&
+        stringToAdd.length() + fb.getDocument().getLength() - lengthToDelete <= MAX_LENGTH)
+      {
+        super.replace(fb, offset, lengthToDelete, stringToAdd, attr);
+      } else {
         Toolkit.getDefaultToolkit().beep();
       }
     }
@@ -84,6 +86,8 @@ public class Main {
       Main.doneProcessing();
     }
   }
+
+
 
   // Called when closing the application //////////////////////////////////////
   public static class OnShutdown implements Runnable {
@@ -203,12 +207,17 @@ public class Main {
 
   // Return to the main panel /////////////////////////////////////////////////
   private static void doneProcessing() {
-    timeout.cancel();
-    timeout = null;
+    if (timeout != null) {
+      timeout.cancel();
+      timeout = null;
+    }
+
+    // clear text first, then focus
     fieldNumber.setText("");
-    ((CardLayout)deck.getLayout()).show(deck, CARD_MAIN);
+    ((CardLayout) deck.getLayout()).show(deck, CARD_MAIN);
     fieldNumber.grabFocus();
   }
+
 
   // Display name and new status //////////////////////////////////////////////
   // Module 3 tickets: Display user name and new status. Doesn't require a
@@ -291,15 +300,15 @@ public class Main {
     labelState.setForeground(Color.magenta);
     panelStatus.add(labelState);
 
-    
     buttonAcknowledge = new JButton("OK");
     buttonAcknowledge.addActionListener(handler);
+
     buttonAcknowledge.setAlignmentX(JComponent.CENTER_ALIGNMENT);
     buttonAcknowledge.setForeground(Color.red);
     panelStatus.add(buttonAcknowledge);
-    panelStatus.add(Box.createVerticalGlue());
 
     panelStatus.add(Box.createVerticalGlue());
+
 
     // Error panel ////////////////////////////////////////////////////////////
     JPanel panelError = new JPanel();
@@ -314,7 +323,6 @@ public class Main {
     labelReason.setFont(fontMain);
     labelReason.setAlignmentX(JComponent.CENTER_ALIGNMENT);
     labelReason.setForeground(Color.yellow);
-
     panelError.add(labelReason);
 
     buttonAcknowledge = new JButton("OK");
